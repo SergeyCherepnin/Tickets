@@ -52,7 +52,7 @@ public class Main {
         Map<String, List<Ticket>> object;
 
         try {
-            object = mapper.readValue(new File(filePath), new TypeReference <>() {});
+            object = mapper.readValue(new File(filePath), new TypeReference<Map<String, List<Ticket>>>() {});
 
         } catch (IOException e) {
             throw new RuntimeException(e);
