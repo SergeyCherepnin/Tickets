@@ -1,0 +1,2 @@
+Average flight time: 10:32:00
+90th percentile of flight time: 12:45:00
