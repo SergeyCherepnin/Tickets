@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -24,6 +25,9 @@ public class Main {
         String averageFlightTime = getAverageFlightTime(flightsDuration);
         String percentileFlightTime = getPercentileFlightTime(90, flightsDuration);
 
+        System.out.println("Average flight time: " + averageFlightTime + "\n" +
+                           "90th percentile flight time: " + percentileFlightTime);
+
         writeToFile(resultFileName, averageFlightTime, percentileFlightTime);
     }
 
@@ -34,7 +38,7 @@ public class Main {
 
         long averageFlightTime = totalFlightTime / allFlightsDuration.size();
 
-        return (new SimpleDateFormat("hh:mm:ss")).format(new Date(averageFlightTime));
+        return convertMillisToTime(averageFlightTime);
     }
 
     private static String getPercentileFlightTime(int percentile, List<Long> flightsDuration) {
@@ -43,7 +47,7 @@ public class Main {
         int index = (int) Math.ceil(percentile / 100.0 * flightsDuration.size());
         long result = flightsDuration.get(index - 1);
 
-        return (new SimpleDateFormat("hh:mm:ss")).format(new Date(result));
+        return convertMillisToTime(result);
     }
 
 
@@ -106,5 +110,13 @@ public class Main {
         }
 
         return allFlightsDuration;
+    }
+
+    private static String convertMillisToTime(long averageFlightTime) {
+        long HH = TimeUnit.MILLISECONDS.toHours(averageFlightTime);
+        long MM = TimeUnit.MILLISECONDS.toMinutes(averageFlightTime) % 60;
+        long SS = TimeUnit.MILLISECONDS.toSeconds(averageFlightTime) % 60;
+
+        return String.format("%02d:%02d:%02d", HH, MM, SS);
     }
 }
